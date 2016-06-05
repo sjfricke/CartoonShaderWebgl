@@ -1,0 +1,23 @@
+{
+  "name": "FrickeFresh",
+  "version": "1.0.0",
+  "description": "parser",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Spencer Fricke",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "cookie-parser": "^1.4.0",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "forever": "^0.15.1",
+    "fs": "0.0.2",
+    "http": "0.0.0",
+    "morgan": "^1.6.1",
+    "multer": "^1.1.0",
+    "path": "^0.12.7"
+  }
+}
