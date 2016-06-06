@@ -19,6 +19,7 @@ Engine.init = function () {
     ) ).normalize();
 
     Engine.renderer = new THREE.WebGLRenderer({ antialias: true });
+    Engine.renderer.setClearColor( 0x2A3744 );
     Engine.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(Engine.renderer.domElement);
 
