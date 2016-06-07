@@ -156,3 +156,4 @@ EventManager.manageCameraMotion = function () {
             Engine.camera.eyeDir, new THREE.Vector3(0, 1, 0)).normalize();
     }
 }
+
