@@ -28,6 +28,20 @@ Engine.init = function () {
 
     // Create list of models in scene
     Engine.model = {};
+
+    //sets uniform for shaders
+    Engine.uniforms =  {
+        outColor: { type: "v3", value: new THREE.Vector3( 0, 1, 0 ) },
+        time: { type: "f", value: 1.0 }
+    };
+
+    //creates shaderMaterial with uniforms and shaders
+    Engine.ShaderMaterial = new THREE.ShaderMaterial( {
+        uniforms: this.uniforms,
+        vertexShader: document.getElementById( 'vertexShader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+    } );
+
 }
 
 Engine.addAmbientLight = function (id, color, intensity) {
@@ -44,7 +58,14 @@ Engine.addPointLight = function (id, pos, color, intensity, dist, decay) {
 Engine.addCube = function (id) {
     var geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
     geometry.computeVertexNormals();
-    var material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-    Engine.model[id] = new THREE.Mesh(geometry, material);
+
+    //var material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+    //Engine.model[id] = new THREE.Mesh(geometry, material);
+
+
+    //grabs the material shader
+    Engine.model[id] = new THREE.Mesh(geometry, Engine.ShaderMaterial);
+
     Engine.scene.add(Engine.model[id]);
 }
+

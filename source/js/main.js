@@ -1,3 +1,5 @@
+var delta, controls;
+
 window.onload = function () {
     Engine.init();
     Engine.addAmbientLight("al0", 0xffffff, 0.1);
@@ -6,9 +8,11 @@ window.onload = function () {
     Engine.addCube("cube2");
 
     //uses Orbit Control library to allow mouse movement
-    var controls = new THREE.OrbitControls( Engine.camera );
+    controls = new THREE.OrbitControls( Engine.camera );
     controls.addEventListener( 'change', renderScene );
 
+    clock = new THREE.Clock(); //starts the clock
+    
     var t = 0;
 
     // Initialize buttons
@@ -26,7 +30,13 @@ window.onload = function () {
      * Renders the frame
      */
     function renderScene() {
+
+        delta = 5 * clock.getDelta(); //gets new time from clock
+
+        Engine.uniforms.time.value += 0.2 * delta; //ups the shaders timer
+
         Engine.renderer.render(Engine.scene, Engine.camera);
+
     }
 
     /**

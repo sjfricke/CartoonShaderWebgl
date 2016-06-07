@@ -23,6 +23,23 @@
 
 <body>
 
+<script id="fragmentShader" type="x-shader/x-fragment">
+uniform float time;
+uniform vec3 outColor;
+
+void main( void ) {
+    gl_FragColor = vec4( outColor, gl_FragColor.w );
+}
+
+</script>
+
+<script id="vertexShader" type="x-shader/x-vertex">
+void main()
+        {
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+        }
+</script>
 
 
 </body>
