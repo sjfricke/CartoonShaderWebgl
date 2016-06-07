@@ -8,7 +8,7 @@ Engine.init = function () {
     Engine.camera.speed = 0.02;
     Engine.camera.theta = 0;
     Engine.camera.phi = 90;
-    Engine.camera.camZoom = 1;
+    Engine.camera.camZoom = 10;
     Engine.camera.position.z = Engine.camera.camZoom;
     Engine.camera.lookAtPos = new THREE.Vector3( 0, 0, 0 );
     Engine.camera.eyeSideDir = new THREE.Vector3( 1, 0, 0 );
@@ -44,6 +44,25 @@ Engine.init = function () {
 
 }
 
+Engine.addModel = function (id, folderPath, objPath, mtlPath) {
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath(folderPath);
+    mtlLoader.load( mtlPath, function( materials ) {
+        materials.preload();
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.setPath(folderPath);
+        objLoader.load( objPath, function ( object ) {
+            Engine.model[id] = object;
+            Engine.scene.add( Engine.model[id] );
+        });
+    });
+}
+
+Engine.removeModel = function (id) {
+    Engine.scene.remove( Engine.model[id] );
+}
+
 Engine.addAmbientLight = function (id, color, intensity) {
     Engine.light[id] = new THREE.AmbientLight( color, intensity );
     Engine.scene.add( Engine.light[id] );
@@ -56,7 +75,7 @@ Engine.addPointLight = function (id, pos, color, intensity, dist, decay) {
 }
 
 Engine.addCube = function (id) {
-    var geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    var geometry = new THREE.BoxGeometry(1, 1, 1);
     geometry.computeVertexNormals();
 
     //var material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });

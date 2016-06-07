@@ -103,29 +103,39 @@ EventManager.manageCameraMotion = function () {
         Engine.camera.lookAt(Engine.camera.lookAtPos);
     }
 
-
-    if(keysdown[37] || keysdown[38] || keysdown[39] || keysdown[40]) {
+    if(keysdown[37] || keysdown[38] || keysdown[39] || keysdown[40] || keysdown[88] || keysdown[90]) {
+        // right arrow >> spin camera right
         if (keysdown[39]) {
-            // right arrow >> spin camera right
             Engine.camera.theta += 5;
         }
+
+        // left arrow >> spin camera left
         if (keysdown[37]) {
-            // left arrow >> spin camera left
             Engine.camera.theta -= 5;
         }
 
+        // down arrow >> orient camera down
         if (keysdown[40]) {
-            // down arrow >> orient camera down
             if (Engine.camera.phi < 180 - 5) {
                 Engine.camera.phi += 5;
             }
         }
 
+        // up arrow >> orient camera up
         if (keysdown[38]) {
-            // up arrow >> orient camera up
             if (Engine.camera.phi > 5) {
                 Engine.camera.phi -= 5;
             }
+        }
+
+        // Z key >> zoom out
+        if (keysdown[90]) {
+            Engine.camera.camZoom += 0.2;
+        }
+
+        // X key >> zoom in
+        if (keysdown[88]) {
+            Engine.camera.camZoom -= 0.2;
         }
 
         Engine.camera.position.x = Engine.camera.lookAtPos.x + Engine.camera.camZoom *
@@ -146,3 +156,4 @@ EventManager.manageCameraMotion = function () {
             Engine.camera.eyeDir, new THREE.Vector3(0, 1, 0)).normalize();
     }
 }
+
