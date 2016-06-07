@@ -5,6 +5,10 @@ window.onload = function () {
     Engine.addCube("cube");
     Engine.addCube("cube2");
 
+    //uses Orbit Control library to allow mouse movement
+    var controls = new THREE.OrbitControls( Engine.camera );
+    controls.addEventListener( 'change', renderScene );
+
     var t = 0;
 
     // Initialize buttons
@@ -15,21 +19,37 @@ window.onload = function () {
     EventManager.init();
 
     // Start application
-    renderScene();
+    animateScene();
 
+
+    /**
+     * Renders the frame
+     */
     function renderScene() {
-        requestAnimationFrame(renderScene);
-        if(!pauseButton.isPaused()) {
-            Engine.renderer.render(Engine.scene, Engine.camera);
+        Engine.renderer.render(Engine.scene, Engine.camera);
+    }
 
+    /**
+     * Runs the animation loop
+     */
+    function animateScene(){
+
+        requestAnimationFrame(animateScene); //runs request for animation frame again
+
+        if(!pauseButton.isPaused()) {
+
+            //rotates cube around
             Engine.model["cube"].rotation.x += 0.02;
             Engine.model["cube"].rotation.y += 0.02;
             Engine.model["cube"].position.x = 0.5 * Math.sin(t);
             Engine.model["cube"].position.y = 0.5 * Math.cos(t);
             t > 2 * Math.PI ? t = 0 : t += 0.01;
-            EventManager.manageCameraMotion();
+            //EventManager.manageCameraMotion();
+
             fpsButton.refreshFPS();
         }
 
+        renderScene(); //calls to render new frame
+        controls.update(); //updates mouse orbit
     }
 }
