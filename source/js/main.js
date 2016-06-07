@@ -1,6 +1,23 @@
+/*Globals*/
 var delta, controls;
+var gui, params;
 
 window.onload = function () {
+
+    gui = new dat.GUI(); //gets Control Panel Object
+    //GUI parameters
+    params = {
+        red: .5,
+        green: .5,
+        blue: .5
+    }
+    //Adds parameters to gui
+    gui.add(params, 'red', 0, 1);
+    gui.add(params, 'green', 0, 1);
+    gui.add(params, 'blue', 0, 1);
+
+    //Things above need to be done prior to Engine.init()
+
     Engine.init();
     Engine.addAmbientLight("al0", 0xffffff, 0.1);
     Engine.addPointLight("pl0", [0, 5, 5], 0xffffff, 3, 100, 15);
@@ -12,7 +29,7 @@ window.onload = function () {
     controls.addEventListener( 'change', renderScene );
 
     clock = new THREE.Clock(); //starts the clock
-    
+
     var t = 0;
 
     // Initialize buttons
@@ -45,6 +62,9 @@ window.onload = function () {
     function animateScene(){
 
         requestAnimationFrame(animateScene); //runs request for animation frame again
+
+        //updates color to render from control panel
+        Engine.renderer.setClearColor( new THREE.Color(params.red,  params.green, params.blue) );
 
         if(!pauseButton.isPaused()) {
 
