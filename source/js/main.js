@@ -11,7 +11,7 @@ window.onload = function () {
         red: .5,
         green: .5,
         blue: .5,
-        PikachuLoad: false
+        PikachuLoad: true
     }
     //Adds parameters to gui
     gui.add(params, 'red', 0, 1);
@@ -23,27 +23,32 @@ window.onload = function () {
 
     Engine.init();
     Engine.addAmbientLight("al0", 0xffffff, 0.1);
-    Engine.addPointLight("pl0", [0, 5, -5], 0xffffff, 3, 100, 15);
-    Engine.addPointLight("pl0", [5, 5, 5], 0xffffff, 3, 100, 15);
-    Engine.addPointLight("pl0", [-5, 5, 5], 0xffffff, 3, 100, 15);
+    Engine.addPointLight("pl0", [0, 2, 5], 0xffffff, 3, 100, 15);
+    Engine.addPointLight("pl1", [0, -3, -5], 0xffffff, 3, 100, 15);
     Engine.addCube("cube");
-    Engine.addCube("cube2");
+    Engine.addModel("Pikachu", '/res/model/pikachu/', 'Pikachu Improved.obj', 'Pikachu Improved.mtl');
 
     PikachuOBJ = {
         id: "Pikachu",
-        folderPath : "/res/model/pikachu/",
+        folderPath: "/res/model/pikachu/",
         objPath: "Pikachu Improved.obj",
         mtlPath: "Pikachu Improved.mtl"
     }
 
 
     //uses Orbit Control library to allow mouse movement
-    controls = new THREE.OrbitControls( Engine.camera );
-    controls.addEventListener( 'change', renderScene );
+    controls = new THREE.OrbitControls(Engine.camera);
+    controls.addEventListener('change', renderScene);
 
     clock = new THREE.Clock(); //starts the clock
 
     var t = 0;
+
+    var boxMaterial = new THREE.MeshBasicMaterial({ map: Engine.RTTbuffer.texture.texture });
+    var boxGeometry2 = new THREE.PlaneGeometry(30, 15);
+    var mainBoxObject = new THREE.Mesh(boxGeometry2, boxMaterial);
+    Engine.scene.add(mainBoxObject);
+    Engine.scene.add(new THREE.EdgesHelper(mainBoxObject, 0x000000));
 
     // Initialize buttons
     fpsButton = new FPSButton();
@@ -64,22 +69,22 @@ window.onload = function () {
 
         Engine.uniforms.time.value += 0.2 * delta; //ups the shaders timer
 
-        Engine.renderer.render(Engine.scene, Engine.camera);
+        Engine.renderAll();
 
     }
 
     /**
      * Runs the animation loop
      */
-    function animateScene(){
+    function animateScene() {
 
         requestAnimationFrame(animateScene); //runs request for animation frame again
 
         //updates color to render from control panel
-        Engine.renderer.setClearColor( new THREE.Color(params.red,  params.green, params.blue) );
+        Engine.renderer.setClearColor(new THREE.Color(params.red, params.green, params.blue));
 
 
-        if(!pauseButton.isPaused()) {
+        if (!pauseButton.isPaused()) {
 
             //rotates cube around
             Engine.model["cube"].rotation.x += 0.02;
@@ -97,7 +102,7 @@ window.onload = function () {
     }
 
     // Fires on every change of the control pannel
-    PickachuToggle.onChange(function(value) {
+    PickachuToggle.onChange(function (value) {
 
         if (value) {
             Engine.addModel("Pikachu", '/res/model/pikachu/', 'Pikachu Improved.obj', 'Pikachu Improved.mtl');
