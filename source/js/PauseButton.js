@@ -19,6 +19,13 @@ function PauseButton() {
         + "position: absolute;"
         + "left: 1em;"
         + "top: 5em;"
+        + "-webkit-touch-callout: none;"
+        + "-webkit-user-select: none;"
+        + "-khtml-user-select: none;"
+        + "-moz-user-select: none;"
+        + "-ms-user-select: none;"
+        + "-o-user-select: none;"
+        + "user-select: none;"
         + "cursor: pointer;";
     document.body.appendChild(this.button);
 
