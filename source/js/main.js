@@ -3,6 +3,14 @@ var delta, controls;
 var gui, params;
 var PikachuOBJ, PickachuToggle;
 
+
+PikachuOBJ = {
+    id: "Pikachu",
+    folderPath : "/res/model/pikachu/",
+    objPath: "Pikachu Improved.obj",
+    mtlPath: "Pikachu Improved.mtl"
+}
+
 window.onload = function () {
 
     gui = new dat.GUI(); //gets Control Panel Object
@@ -19,6 +27,8 @@ window.onload = function () {
     gui.add(params, 'blue', 0, 1);
     PickachuToggle = gui.add(params, 'PikachuLoad');
 
+
+
     //Things above need to be done prior to Engine.init()
 
     Engine.init();
@@ -26,15 +36,10 @@ window.onload = function () {
     Engine.addPointLight("pl0", [0, 5, -5], 0xffffff, 3, 100, 15);
     Engine.addPointLight("pl0", [5, 5, 5], 0xffffff, 3, 100, 15);
     Engine.addPointLight("pl0", [-5, 5, 5], 0xffffff, 3, 100, 15);
-    Engine.addCube("cube");
-    Engine.addCube("cube2");
+   // Engine.addCube("cube");
+   // Engine.addCube("cube2");
 
-    PikachuOBJ = {
-        id: "Pikachu",
-        folderPath : "/res/model/pikachu/",
-        objPath: "Pikachu Improved.obj",
-        mtlPath: "Pikachu Improved.mtl"
-    }
+
 
 
     //uses Orbit Control library to allow mouse movement
@@ -76,17 +81,17 @@ window.onload = function () {
         requestAnimationFrame(animateScene); //runs request for animation frame again
 
         //updates color to render from control panel
-        Engine.renderer.setClearColor( new THREE.Color(params.red,  params.green, params.blue) );
-
+        //Engine.renderer.setClearColor( new THREE.Color(params.red,  params.green, params.blue) );
+        Engine.uniforms.outColor.value =  new THREE.Color(params.red,  params.green, params.blue);
 
         if(!pauseButton.isPaused()) {
 
             //rotates cube around
-            Engine.model["cube"].rotation.x += 0.02;
-            Engine.model["cube"].rotation.y += 0.02;
-            Engine.model["cube"].position.x = 5 * Math.sin(t);
-            Engine.model["cube"].position.y = 5 * Math.cos(t);
-            t > 2 * Math.PI ? t = 0 : t += 0.01;
+            // Engine.model["cube"].rotation.x += 0.02;
+            // Engine.model["cube"].rotation.y += 0.02;
+            // Engine.model["cube"].position.x = 5 * Math.sin(t);
+            // Engine.model["cube"].position.y = 5 * Math.cos(t);
+            // t > 2 * Math.PI ? t = 0 : t += 0.01;
             //EventManager.manageCameraMotion();
 
             fpsButton.refreshFPS();
@@ -102,7 +107,7 @@ window.onload = function () {
         if (value) {
             Engine.addModel("Pikachu", '/res/model/pikachu/', 'Pikachu Improved.obj', 'Pikachu Improved.mtl');
         } else {
-            Engine.removeModel("Pikachu");
+            Engine.removeModel("Pikachu");  
         }
     });
 
