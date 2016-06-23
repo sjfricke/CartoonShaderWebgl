@@ -25,7 +25,7 @@ window.onload = function () {
     }
     //Adds parameters to gui
     gui.add(params, 'Processed');
-    gui.add(params, 'Filter', { "None": 0, "Diffuse": 1, "Depth 1": 2, "Depth 2": 3, "Depth 3": 4 });
+    gui.add(params, 'Filter', { "None": 0, "Diffuse": 1, "Depth 1": 2, "Depth 2": 3, "Depth 3": 4, "Sobel": 5, "Edge Normals": 6});
     gui.add(params, 'red', 0, 1);
     gui.add(params, 'green', 0, 1);
     gui.add(params, 'blue', 0, 1);

@@ -90,6 +90,8 @@ Engine.init = function () {
                     cameraFar: { value: Engine.camera.far },
                     tDiffuse: { value: Engine.renderTarget.texture },
                     tDepth: { value: Engine.renderTarget.depthTexture },
+                    uvdx: { value: 1.0 / screen.width },
+                    uvdy: { value : 1.0 / screen.height },
                     filterMode: { value: params.Filter } // mode controlled by GUI element
                 }
             }));

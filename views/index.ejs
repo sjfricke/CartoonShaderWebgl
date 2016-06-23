@@ -33,6 +33,8 @@
       #include <packing>
 
       varying vec2 vUv;
+      uniform float uvdx;
+      uniform float uvdy;
       uniform sampler2D tDiffuse;
       uniform sampler2D tDepth;
       uniform float cameraNear;
@@ -40,6 +42,61 @@
       
       uniform int filterMode;
 
+      vec3 sobel (sampler2D sampler, vec2 uv, float dx, float dy) {
+      
+        float a = texture2D(sampler, vec2(uv.x - dx, uv.y - dy)).x;
+        float b = texture2D(sampler, vec2(uv.x - dx, uv.y)).x;
+        float c = texture2D(sampler, vec2(uv.x - dx, uv.y + dy)).x;
+        float d = texture2D(sampler, vec2(uv.x, uv.y - dy)).x;
+        float e = texture2D(sampler, vec2(uv.x, uv.y)).x;
+        float f = texture2D(sampler, vec2(uv.x, uv.y + dy)).x;
+        float g = texture2D(sampler, vec2(uv.x + dx, uv.y - dy)).x;
+        float h = texture2D(sampler, vec2(uv.x + dx, uv.y)).x;
+        float i = texture2D(sampler, vec2(uv.x + dx, uv.y + dy)).x;
+        
+        float magX = 0.0;
+        magX += a * (-1.0); magX += b * (0.0); magX += c * (1.0);
+        magX += d * (-2.0); magX += e * (0.0); magX += f * (2.0);
+        magX += g * (-1.0); magX += h * (0.0); magX += i * (1.0);
+        
+        float magY = 0.0;
+        magY += a * (-1.0); magY += b * (-2.0); magY += c * (-1.0);
+        magY += d * (0.0); magY += e * (0.0); magY += f * (0.0);
+        magY += g * (1.0); magY += h * (2.0); magY += i * (1.0);
+        
+        float mag = 1.0 - 10.0 * sqrt(magX * magX + magY * magY);
+        if(mag > 0.6) {
+            mag = 1.0;
+        }
+        return vec3(mag);
+        
+      }
+      
+      vec3 sobelRGB (sampler2D sampler, vec2 uv, float dx, float dy) {
+      
+        float a = texture2D(sampler, vec2(uv.x - dx, uv.y - dy)).x;
+        float b = texture2D(sampler, vec2(uv.x - dx, uv.y)).x;
+        float c = texture2D(sampler, vec2(uv.x - dx, uv.y + dy)).x;
+        float d = texture2D(sampler, vec2(uv.x, uv.y - dy)).x;
+        float e = texture2D(sampler, vec2(uv.x, uv.y)).x;
+        float f = texture2D(sampler, vec2(uv.x, uv.y + dy)).x;
+        float g = texture2D(sampler, vec2(uv.x + dx, uv.y - dy)).x;
+        float h = texture2D(sampler, vec2(uv.x + dx, uv.y)).x;
+        float i = texture2D(sampler, vec2(uv.x + dx, uv.y + dy)).x;
+        
+        float magX = 0.0;
+        magX += a * (-1.0); magX += b * (0.0); magX += c * (1.0);
+        magX += d * (-2.0); magX += e * (0.0); magX += f * (2.0);
+        magX += g * (-1.0); magX += h * (0.0); magX += i * (1.0);
+        
+        float magY = 0.0;
+        magY += a * (-1.0); magY += b * (-2.0); magY += c * (-1.0);
+        magY += d * (0.0); magY += e * (0.0); magY += f * (0.0);
+        magY += g * (1.0); magY += h * (2.0); magY += i * (1.0);
+        
+        return normalize(vec3(magX, magY, 0.2));
+        
+      }
 
       float readDepth (sampler2D depthSampler, vec2 coord) {
         float fragCoordZ = texture2D(depthSampler, coord).x;
@@ -52,7 +109,10 @@
         float depth1 = readDepth(tDepth, vUv);
         float depth2 = texture2D(tDepth, vUv).x;
         
-        if(filterMode == 0 || filterMode == 1) {
+        if(filterMode == 0) {
+            gl_FragColor.rgb = vec3(diffuse) * sobel(tDepth, vUv, uvdx, uvdy);
+        }
+        else if (filterMode == 1) {
             gl_FragColor.rgb = vec3(diffuse);
         }
         else if (filterMode == 2) {
@@ -61,8 +121,14 @@
         else if (filterMode == 3) {
             gl_FragColor.rgb = vec3(depth2);
         }
-        else {
+        else if(filterMode == 4) {
             gl_FragColor.rgb = vec3(1.0 - depth2);
+        }
+        else if(filterMode == 5) {
+            gl_FragColor.rgb = sobel(tDepth, vUv, uvdx, uvdy);
+        }
+        else {
+            gl_FragColor.rgb = sobelRGB(tDepth, vUv, uvdx, uvdy);
         }
         gl_FragColor.a = 1.0;
       }
