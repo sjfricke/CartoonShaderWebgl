@@ -1,10 +1,11 @@
 /**
- * Created by arthu on 6/6/2016.
+ * Created by SpencerFricke on 6/25/2016.
  */
 
-function PauseButton() {
+
+function ResetButton() {
     this.button = document.createElement("div");
-    this.button.innerText = "Pause";
+    this.button.innerText = "Reset";
     this.button.pause = false;
     this.button.style =
         "background-color: #ED2553;"
@@ -18,7 +19,7 @@ function PauseButton() {
         + "color: white;"
         + "position: absolute;"
         + "left: 1em;"
-        + "top: 5em;"
+        + "top: 7.5em;"
         + "-webkit-touch-callout: none;"
         + "-webkit-user-select: none;"
         + "-khtml-user-select: none;"
@@ -30,16 +31,6 @@ function PauseButton() {
     document.body.appendChild(this.button);
 
     this.button.onclick = function () {
-        this.pause = !this.pause;
-        if (this.pause) {
-            this.innerText = "Continue";
-        }
-        else {
-            this.innerText = "Pause";
-        }
-    }
-}
 
-PauseButton.prototype.isPaused = function () {
-    return this.button.pause;
+    }
 }

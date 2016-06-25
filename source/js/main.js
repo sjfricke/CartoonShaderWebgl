@@ -8,28 +8,13 @@
 
 /*Globals*/
 var delta, controls;
-var gui, params;
-var PikachuOBJ, PickachuToggle;
+var PikachuOBJ, PickachuToggle; //model vars
+var fpsButton, pauseButton, resetButton; //web UI
+var newColor; //used in render loop
 
 window.onload = function () {
 
-    gui = new dat.GUI(); //gets Control Panel Object
-    //GUI parameters
-    params = {
-        Processed: true,
-        Filter: 0,
-        red: .5,
-        green: .5,
-        blue: .5,
-        PikachuLoad: true
-    }
-    //Adds parameters to gui
-    gui.add(params, 'Processed');
-    gui.add(params, 'Filter', { "None": 0, "Diffuse": 1, "Depth 1": 2, "Depth 2": 3, "Depth 3": 4, "Sobel": 5, "Edge Normals": 6});
-    gui.add(params, 'red', 0, 1);
-    gui.add(params, 'green', 0, 1);
-    gui.add(params, 'blue', 0, 1);
-    PickachuToggle = gui.add(params, 'PikachuLoad');
+    guiInit();
 
     //Things above need to be done prior to Engine.init()
 
@@ -67,6 +52,7 @@ window.onload = function () {
     // Initialize buttons
     fpsButton = new FPSButton();
     pauseButton = new PauseButton();
+    //resetButton = new ResetButton();
     document.onkeypress = function (e) {
         if (e.keyCode == 32) {
             pauseButton.button.click();
@@ -85,7 +71,19 @@ window.onload = function () {
      */
     function renderScene() {
         /* Features that never pause */
-        Engine.renderer.setClearColor(new THREE.Color(params.red, params.green, params.blue));
+
+        //sets the background color if option toggled
+        if (params_BackgroundColor.toggle) {
+            Engine.renderer.setClearColor(new THREE.Color(params_BackgroundColor.color));
+        }
+
+        //sets the point light color if option toggled
+        if (params_LightColor.toggle) {
+            newColor = new THREE.Color(params_LightColor.color);
+            Engine.light["pl0"].color.set(newColor);
+            Engine.light["pl1"].color.set(newColor);
+        }
+
         Engine.vpQuad.material.uniforms.filterMode.value = params.Filter;
         // // Uncomment to allow motion control through keyboard
         //EventManager.manageCameraMotion();

@@ -99,12 +99,13 @@ Engine.init = function () {
     }
 }
 
+var mtlLoader, objLoader;
 Engine.addModel = function (id, folderPath, objPath, mtlPath) {
-    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader = new THREE.MTLLoader();
     mtlLoader.setPath(folderPath);
     mtlLoader.load(mtlPath, function (materials) {
         materials.preload();
-        var objLoader = new THREE.OBJLoader();
+        objLoader = new THREE.OBJLoader();
         objLoader.setMaterials(materials);
         objLoader.setPath(folderPath);
         objLoader.load(objPath, function (object) {
@@ -137,26 +138,26 @@ Engine.removeModel = function (id) {
 
 Engine.addAmbientLight = function (id, color, intensity) {
     // Work aroud for missing params
-    if (color === undefined) { color = 0xffffff; }
-    if (intensity === undefined) { intensity = 1; }
+    this.color = color || 0xffffff;
+    this.intensity = intensity || 1;
     
     // Require ID to successfully add light source
     if (id !== undefined) {
-        Engine.light[id] = new THREE.AmbientLight(color, intensity);
+        Engine.light[id] = new THREE.AmbientLight(this.color, this.intensity);
         Engine.scene.add(Engine.light[id]);
     }
 }
 
 Engine.addPointLight = function (id, pos, color, intensity, dist, decay) {
-    // Work aroud for missing params
-    if (color === undefined) { color = 0xffffff;}
-    if (intensity === undefined) { intensity = 1;}
-    if (dist === undefined) { dist = 0;}
-    if (decay === undefined) { decay = 0; }
+    // Work around for missing params
+    this.color = color || 0xffffff;
+    this.intensity = intensity || 1;
+    this.dist = dist || 0;
+    this.decay = decay || 0;
 
     // Require ID and position to successfully add light source
     if (id !== undefined && pos !== undefined) {
-        Engine.light[id] = new THREE.PointLight(color, intensity, dist, decay);
+        Engine.light[id] = new THREE.PointLight(this.color, this.intensity, this.dist, this.decay);
         Engine.light[id].position.set(pos[0], pos[1], pos[2]);
         Engine.scene.add(Engine.light[id]);
     }
