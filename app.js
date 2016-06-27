@@ -4,8 +4,6 @@ var path = require('path');  //grabs local path
 var logger = require('morgan'); //logs in console
 var cookieParser = require('cookie-parser'); 
 var bodyParser = require('body-parser'); 
-var fs = require('fs');
-var multer  =   require('multer'); //for photo upload
 
 //var api = require('./routes/api');  
 //var mongoose = require('mongoose');                         //add for Mongo support

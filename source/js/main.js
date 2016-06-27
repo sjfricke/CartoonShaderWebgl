@@ -8,9 +8,16 @@
 
 /*Globals*/
 var delta, controls;
-var PikachuOBJ, PickachuToggle; //model vars
+var PickachuToggle; //model vars
 var fpsButton, pauseButton, resetButton; //web UI
 var newColor; //used in render loop
+
+var PikachuOBJ = {
+        id: "Pikachu",
+        folderPath: "/res/model/Pikachu/",
+        objPath: "Pikachu Improved.obj",
+        mtlPath: "Pikachu Improved.mtl"
+}
 
 window.onload = function () {
 
@@ -23,21 +30,16 @@ window.onload = function () {
     Engine.addPointLight("pl0", [0, 2, 5], 0xffffff, 3, 100, 15);
     Engine.addPointLight("pl1", [0, -3, -5], 0xffffff, 3, 100, 15);
     Engine.addCube("cube");
-    Engine.addModel("Pikachu", '/res/model/pikachu/', 'Pikachu Improved.obj', 'Pikachu Improved.mtl');
+    Engine.addModel(PikachuOBJ.id, PikachuOBJ.folderPath, PikachuOBJ.objPath, PikachuOBJ.mtlPath);
 
-    PikachuOBJ = {
-        id: "Pikachu",
-        folderPath: "/res/model/pikachu/",
-        objPath: "Pikachu Improved.obj",
-        mtlPath: "Pikachu Improved.mtl"
-    }
+    
     // Fires on every change of the control pannel
     PickachuToggle.onChange(function (value) {
 
         if (value) {
-            Engine.addModel("Pikachu", '/res/model/pikachu/', 'Pikachu Improved.obj', 'Pikachu Improved.mtl');
+            Engine.addModel(PikachuOBJ.id, PikachuOBJ.folderPath, PikachuOBJ.objPath, PikachuOBJ.mtlPath);
         } else {
-            Engine.removeModel("Pikachu");
+            Engine.removeModel(PikachuOBJ.id);
         }
     });
 
