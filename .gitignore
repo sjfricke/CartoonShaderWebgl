@@ -85,5 +85,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+source/.idea/*.xml
+source/.idea/*.iml
+source/js/.idea/*.xml
+source/js/.idea/*.iml
 .idea/*.xml
 .idea/*.iml
