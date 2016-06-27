@@ -10,7 +10,8 @@ Features
 
 ## Showcase
 [Live Example](http://frickality.me:8000/)
-![Image of current cartoon shader](http://imgur.com/SZiyRI3)
+
+![Image of current cartoon shader](http://i.imgur.com/SZiyRI3.jpg)
 
 ## Future Plans
 
