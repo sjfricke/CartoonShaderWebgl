@@ -5,7 +5,7 @@
     <title>My first Three.js app</title>
     <style>
       body { margin: 0; overflow:hidden; }
-      canvas { width: 100%; height: 100% }
+      canvas { width: 100%; height: 100%; }
     </style>
 <title>Cartoon Shader</title>
     <link type="text/css" rel="stylesheet" href="css/style.css">
@@ -102,6 +102,38 @@
         return normalize(vec3(magX, magY, 0.2));
         
       }
+      
+      vec3 blurredSobel (sampler2D sampler, vec2 uv, float dx, float dy) {
+        // Blurr Strength per pixel:
+        // (center is the active pixel)
+        //       1
+        //    2  4  2
+        // 1  4 16  4  1
+        //    2  4  2
+        //       1
+        vec3 blurredSobel = 
+            // main pixel
+            ( 16.0 * sobel(sampler, uv, dx, dy)
+            
+            // inner side pixels
+            + 4.0 * sobel(sampler, vec2(uv.x + 2.0*dx, uv.y), dx, dy)
+            + 4.0 * sobel(sampler, vec2(uv.x, uv.y + 2.0*dy), dx, dy)
+            + 4.0 * sobel(sampler, vec2(uv.x - 2.0*dx, uv.y), dx, dy)
+            + 4.0 * sobel(sampler, vec2(uv.x, uv.y - 2.0*dy), dx, dy)
+            
+            // border pixels
+            + 2.0 * sobel(sampler, vec2(uv.x + 2.0*dx, uv.y + 2.0*dy), dx, dy)
+            + 2.0 * sobel(sampler, vec2(uv.x - 2.0*dx, uv.y - 2.0*dy), dx, dy)
+            + 2.0 * sobel(sampler, vec2(uv.x - 2.0*dx, uv.y + 2.0*dy), dx, dy)
+            + 2.0 * sobel(sampler, vec2(uv.x + 2.0*dx, uv.y - 2.0*dy), dx, dy)
+            
+            // outer side pixels
+            + sobel(sampler, vec2(uv.x + 3.0*dx, uv.y), dx, dy)
+            + sobel(sampler, vec2(uv.x, uv.y + 3.0*dy), dx, dy)
+            + sobel(sampler, vec2(uv.x - 3.0*dx, uv.y), dx, dy)
+            + sobel(sampler, vec2(uv.x, uv.y - 3.0*dy), dx, dy) ) / 44.0;
+        return blurredSobel;
+      }
 
       float readDepth (sampler2D depthSampler, vec2 coord) {
         float fragCoordZ = texture2D(depthSampler, coord).x;
@@ -115,7 +147,7 @@
         float depth2 = texture2D(tDepth, vUv).x;
         
         if(filterMode == 0) {
-            gl_FragColor.rgb = vec3(diffuse) * sobel(tDepth, vUv, uvdx, uvdy);
+            gl_FragColor.rgb = vec3(diffuse) * blurredSobel(tDepth, vUv, uvdx, uvdy);
         }
         else if (filterMode == 1) {
             gl_FragColor.rgb = vec3(diffuse);
@@ -132,8 +164,11 @@
         else if(filterMode == 5) {
             gl_FragColor.rgb = sobel(tDepth, vUv, uvdx, uvdy);
         }
-        else {
+        else if(filterMode == 6){
             gl_FragColor.rgb = sobelRGB(tDepth, vUv, uvdx, uvdy);
+        }
+        else {
+            gl_FragColor.rgb = blurredSobel(tDepth, vUv, uvdx, uvdy);
         }
         gl_FragColor.a = 1.0;
       }

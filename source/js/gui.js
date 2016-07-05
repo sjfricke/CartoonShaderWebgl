@@ -28,7 +28,8 @@ function guiInit() {
         "Depth 2": 3,
         "Depth 3": 4,
         "Sobel": 5,
-        "Edge Normals": 6
+        "Edge Normals": 6,
+        "Sobel + Blurr": 7
     });
 
     PickachuToggle = gui.add(params, 'PikachuLoad');
