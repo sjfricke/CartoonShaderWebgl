@@ -19,6 +19,13 @@ var PikachuOBJ = {
         mtlPath: "Pikachu Improved.mtl"
 }
 
+var churchOBJ = {
+    id: "Church",
+    folderPath: "/res/model/Church/",
+    objPath: "church.obj",
+    mtlPath: "church.mtl"
+}
+
 window.onload = function () {
 
     guiInit();
@@ -31,17 +38,7 @@ window.onload = function () {
     Engine.addPointLight("pl1", [0, -3, -5], 0xffffff, 3, 100, 15);
     Engine.addCube("cube");
     Engine.addModel(PikachuOBJ.id, PikachuOBJ.folderPath, PikachuOBJ.objPath, PikachuOBJ.mtlPath);
-
-    
-    // Fires on every change of the control pannel
-    PickachuToggle.onChange(function (value) {
-
-        if (value) {
-            Engine.addModel(PikachuOBJ.id, PikachuOBJ.folderPath, PikachuOBJ.objPath, PikachuOBJ.mtlPath);
-        } else {
-            Engine.removeModel(PikachuOBJ.id);
-        }
-    });
+    Engine.loadModel(churchOBJ.id, churchOBJ.folderPath, churchOBJ.objPath, churchOBJ.mtlPath, false);
 
 
     //uses Orbit Control library to allow mouse movement

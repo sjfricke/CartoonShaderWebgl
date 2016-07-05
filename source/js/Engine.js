@@ -99,8 +99,20 @@ Engine.init = function () {
     }
 }
 
-var mtlLoader, objLoader;
-Engine.addModel = function (id, folderPath, objPath, mtlPath) {
+Engine.loadModel = function (id, folderPath, objPath, mtlPath, addIfTrue) {
+    if (addIfTrue) {
+        addIfTrue = function () {
+            Engine.scene.add(Engine.model[id]);
+
+            // // Draws wireframe on top of objects surface
+            // Engine.model[id].edges = new THREE.EdgesHelper(object.children[0], 0x000000);
+            // Engine.scene.add(Engine.model[id].edges);
+        };
+    }
+    else {
+        addIfTrue = function () { };
+    }
+    var mtlLoader, objLoader;
     mtlLoader = new THREE.MTLLoader();
     mtlLoader.setPath(folderPath);
     mtlLoader.load(mtlPath, function (materials) {
@@ -123,13 +135,18 @@ Engine.addModel = function (id, folderPath, objPath, mtlPath) {
             // 
             // });
 
-            Engine.scene.add(Engine.model[id]);
-
-            // // Draws wireframe on top of objects surface
-            // Engine.model[id].edges = new THREE.EdgesHelper(object.children[0], 0x000000);
-            // Engine.scene.add(Engine.model[id].edges);
+            addIfTrue();
         });
     });
+}
+
+Engine.addModel = function (id, folderPath, objPath, mtlPath) {
+    if (Engine.model[id] !== undefined) {
+        Engine.scene.add(Engine.model[id]);
+    }
+    else {
+        Engine.loadModel(id, folderPath, objPath, mtlPath, true);
+    }
 }
 
 Engine.removeModel = function (id) {
