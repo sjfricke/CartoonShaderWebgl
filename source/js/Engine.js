@@ -21,6 +21,7 @@ Engine.init = function () {
 
     // Create list of models in scene
     Engine.model = {};
+    Engine.model.skybox = null;
 
     //sets uniform for shaders
     Engine.uniforms = {
@@ -100,6 +101,7 @@ Engine.init = function () {
 }
 
 Engine.loadModel = function (id, folderPath, objPath, mtlPath, addIfTrue) {
+    addIfTrue = addIfTrue || false;
     if (addIfTrue) {
         addIfTrue = function () {
             Engine.scene.add(Engine.model[id]);
@@ -151,6 +153,44 @@ Engine.addModel = function (id, folderPath, objPath, mtlPath) {
 
 Engine.removeModel = function (id) {
     Engine.scene.remove(Engine.model[id]);
+}
+
+Engine.loadSkybox = function (posxImgFilename, negxImgFilename, posyImgFilename,
+    negyImgFilename, poszImgFilename, negzImgFilename, folderPath) {
+    folderPath = folderPath || "";
+
+    var skyGeometry = new THREE.CubeGeometry(50, 50, 50, 1, 1, 1, null, true);
+
+    var materialArray = [];
+    var directions = [posxImgFilename, negxImgFilename, posyImgFilename,
+    negyImgFilename, poszImgFilename, negzImgFilename];
+    for (var i = 0; i < 6; i++)
+        materialArray.push(new THREE.MeshBasicMaterial({
+            map: (new THREE.TextureLoader).load(folderPath + directions[i]),
+            side: THREE.BackSide
+        }));
+
+    var skyMaterial = new THREE.MultiMaterial(materialArray);
+
+    Engine.model.skybox = new THREE.Mesh(skyGeometry, skyMaterial);
+    Engine.model.skybox.flipSided = true;
+}
+
+Engine.addSkybox = function (posxImgFilename, negxImgFilename, posyImgFilename,
+    negyImgFilename, poszImgFilename, negzImgFilename, folderPath) {
+    if (posxImgFilename !== undefined && negxImgFilename !== undefined
+        && posyImgFilename !== undefined && negyImgFilename !== undefined
+        && poszImgFilename !== undefined && negzImgFilename !== undefined) {
+
+        Engine.loadSkybox(posxImgFilename, negxImgFilename, posyImgFilename,
+    negyImgFilename, poszImgFilename, negzImgFilename, folderPath);
+    }
+
+    Engine.scene.add(Engine.model.skybox);
+}
+
+Engine.removeSkybox = function () {
+    Engine.scene.remove(Engine.model.skybox);
 }
 
 Engine.addAmbientLight = function (id, color, intensity) {

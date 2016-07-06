@@ -36,6 +36,7 @@ window.onload = function () {
     Engine.addAmbientLight("al0", 0xffffff, 0.1);
     Engine.addPointLight("pl0", [0, 2, 5], 0xffffff, 3, 100, 15);
     Engine.addPointLight("pl1", [0, -3, -5], 0xffffff, 3, 100, 15);
+    Engine.addSkybox("negx.png", "posx.png", "posy.png", "negy.png", "posz.png", "negz.png","\\res\\skybox\\toonSky\\");
     Engine.addCube("cube");
     Engine.addModel(PikachuOBJ.id, PikachuOBJ.folderPath, PikachuOBJ.objPath, PikachuOBJ.mtlPath);
     Engine.loadModel(churchOBJ.id, churchOBJ.folderPath, churchOBJ.objPath, churchOBJ.mtlPath, false);
@@ -70,6 +71,11 @@ window.onload = function () {
      */
     function renderScene() {
         /* Features that never pause */
+        if (Engine.model.skybox != null) {
+            Engine.model.skybox.position.x = Engine.camera.position.x;
+            Engine.model.skybox.position.y = Engine.camera.position.y;
+            Engine.model.skybox.position.z = Engine.camera.position.z;
+        }
 
         //sets the background color if option toggled
         if (params_BackgroundColor.toggle) {

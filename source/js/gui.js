@@ -11,9 +11,11 @@ function guiInit() {
         Filter: 0
     }
     params_models = {
-        Pikachu: true,
-        Church: false,
         Model: 0
+    }
+    params_skyboxes = {
+        Switch: true,
+        Skybox: 0
     }
     params_BackgroundColor = {
         toggle: true,
@@ -41,7 +43,7 @@ function guiInit() {
     activeModel = modelsFolder.add(params_models, 'Model', {
         "Pikachu": 0,
         "Church": 1
-    })
+    });
     activeModel.onChange(function (e) {
         if (e == 0) {
             Engine.removeModel(churchOBJ.id);
@@ -51,6 +53,39 @@ function guiInit() {
             Engine.removeModel(PikachuOBJ.id);
             Engine.addModel(churchOBJ.id, churchOBJ.folderPath, churchOBJ.objPath, churchOBJ.mtlPath);
         }
+    });
+
+    skyboxesFolder = gui.addFolder("SkyBoxes");
+    skyboxesFolder.add(params_skyboxes, 'Switch').onChange(function (e) {
+        if (e) {
+            Engine.addSkybox();
+        }
+        else {
+            Engine.removeSkybox();
+        }
+    });
+    activeSkybox = skyboxesFolder.add(params_skyboxes, 'Skybox', {
+        "Toon Sky": 0,
+        "Pokemon Daytime Sky": 1,
+        "Pokemon Nighttime Sky": 2
+    });
+    activeSkybox.onChange(function (e) {
+        var folderName;
+        if (e == 0) {
+            folderName = "toonSky";
+        }
+        else if (e == 1) {
+            folderName = "pokemonDaytimeSky";
+        }
+        else {
+            folderName = "pokemonNighttimeSky";
+        }
+
+        if (params_skyboxes.Switch) Engine.removeSkybox();
+
+        Engine.loadSkybox("negx.png", "posx.png", "posy.png", "negy.png", "posz.png", "negz.png", "\\res\\skybox\\" + folderName + "\\");
+
+        if (params_skyboxes.Switch) Engine.addSkybox();
     });
     
     lightColorFolder = gui.addFolder("Light Color");
