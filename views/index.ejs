@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
     <meta charset="utf-8">
-    <title>My first Three.js app</title>
+    <title>Depth-based Toon Shader</title>
     <style>
       body { margin: 0; overflow:hidden; }
       canvas { width: 100%; height: 100%; }
@@ -50,13 +50,13 @@
       vec3 sobel (sampler2D sampler, vec2 uv, float dx, float dy) {
       
         float a = texture2D(sampler, vec2(uv.x - dx, uv.y - dy)).x;
-        float b = texture2D(sampler, vec2(uv.x - dx, uv.y)).x;
-        float c = texture2D(sampler, vec2(uv.x - dx, uv.y + dy)).x;
-        float d = texture2D(sampler, vec2(uv.x, uv.y - dy)).x;
+        float b = texture2D(sampler, vec2(uv.x, uv.y - dy)).x;
+        float c = texture2D(sampler, vec2(uv.x + dx, uv.y - dy)).x;
+        float d = texture2D(sampler, vec2(uv.x - dx, uv.y)).x;
         float e = texture2D(sampler, vec2(uv.x, uv.y)).x;
-        float f = texture2D(sampler, vec2(uv.x, uv.y + dy)).x;
-        float g = texture2D(sampler, vec2(uv.x + dx, uv.y - dy)).x;
-        float h = texture2D(sampler, vec2(uv.x + dx, uv.y)).x;
+        float f = texture2D(sampler, vec2(uv.x + dx, uv.y)).x;
+        float g = texture2D(sampler, vec2(uv.x - dx, uv.y + dy)).x;
+        float h = texture2D(sampler, vec2(uv.x, uv.y + dy)).x;
         float i = texture2D(sampler, vec2(uv.x + dx, uv.y + dy)).x;
         
         float magX = 0.0;
@@ -78,15 +78,19 @@
       }
       
       vec3 sobelRGB (sampler2D sampler, vec2 uv, float dx, float dy) {
-      
+        
+        // Pixels:
+        // a b c
+        // d e f
+        // g h i
         float a = texture2D(sampler, vec2(uv.x - dx, uv.y - dy)).x;
-        float b = texture2D(sampler, vec2(uv.x - dx, uv.y)).x;
-        float c = texture2D(sampler, vec2(uv.x - dx, uv.y + dy)).x;
-        float d = texture2D(sampler, vec2(uv.x, uv.y - dy)).x;
+        float b = texture2D(sampler, vec2(uv.x, uv.y - dy)).x;
+        float c = texture2D(sampler, vec2(uv.x + dx, uv.y - dy)).x;
+        float d = texture2D(sampler, vec2(uv.x - dx, uv.y)).x;
         float e = texture2D(sampler, vec2(uv.x, uv.y)).x;
-        float f = texture2D(sampler, vec2(uv.x, uv.y + dy)).x;
-        float g = texture2D(sampler, vec2(uv.x + dx, uv.y - dy)).x;
-        float h = texture2D(sampler, vec2(uv.x + dx, uv.y)).x;
+        float f = texture2D(sampler, vec2(uv.x + dx, uv.y)).x;
+        float g = texture2D(sampler, vec2(uv.x - dx, uv.y + dy)).x;
+        float h = texture2D(sampler, vec2(uv.x, uv.y + dy)).x;
         float i = texture2D(sampler, vec2(uv.x + dx, uv.y + dy)).x;
         
         float magX = 0.0;
@@ -181,18 +185,21 @@
 <script id="fragmentShader" type="x-shader/x-fragment">
 uniform float time;
 uniform vec3 outColor;
+varying vec3 fnormal;
 
 void main( void ) {
-    gl_FragColor = vec4( outColor, gl_FragColor.w );
+    gl_FragColor = viewMatrix*vec4( fnormal, gl_FragColor.w );
 }
 
 </script>
 
 <script id="vertexShader" type="x-shader/x-vertex">
+varying vec3 fnormal;
 void main()
         {
             vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
             gl_Position = projectionMatrix * mvPosition;
+            fnormal = normal;
         }
 </script>
 

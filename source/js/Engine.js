@@ -8,6 +8,8 @@
 function Engine() { };
 
 Engine.init = function () {
+    FAR_PLANE = 1000;
+
     initCamera();
 
     initRenderer();
@@ -38,7 +40,7 @@ Engine.init = function () {
 
     /* INITIALIZATION FUNCTIONS */
     function initCamera() {
-        Engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 50);
+        Engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, FAR_PLANE);
         Engine.camera.speed = 0.02;
         Engine.camera.theta = 0;
         Engine.camera.phi = 90;
@@ -91,8 +93,8 @@ Engine.init = function () {
                     cameraFar: { value: Engine.camera.far },
                     tDiffuse: { value: Engine.renderTarget.texture },
                     tDepth: { value: Engine.renderTarget.depthTexture },
-                    uvdx: { value: 1.0 / screen.width },
-                    uvdy: { value : 1.0 / screen.height },
+                    uvdx: { value: 0.8 / screen.width },
+                    uvdy: { value : 0.8 / screen.height },
                     filterMode: { value: params.Filter } // mode controlled by GUI element
                 }
             }));
@@ -159,7 +161,7 @@ Engine.loadSkybox = function (posxImgFilename, negxImgFilename, posyImgFilename,
     negyImgFilename, poszImgFilename, negzImgFilename, folderPath) {
     folderPath = folderPath || "";
 
-    var skyGeometry = new THREE.CubeGeometry(50, 50, 50, 1, 1, 1, null, true);
+    var skyGeometry = new THREE.CubeGeometry(FAR_PLANE, FAR_PLANE, FAR_PLANE, 1, 1, 1, null, true);
 
     var materialArray = [];
     var directions = [posxImgFilename, negxImgFilename, posyImgFilename,

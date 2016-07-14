@@ -34,8 +34,12 @@ window.onload = function () {
 
     Engine.init();
     Engine.addAmbientLight("al0", 0xffffff, 0.1);
-    Engine.addPointLight("pl0", [0, 2, 5], 0xffffff, 3, 100, 15);
-    Engine.addPointLight("pl1", [0, -3, -5], 0xffffff, 3, 100, 15);
+    Engine.addPointLight("pl0", [0, 2, 5], 0xffffff, 1.4, 100, 15);
+    Engine.addPointLight("pl1", [5, 4, 2], 0xffffff, 1.4, 100, 15);
+    Engine.addPointLight("pl2", [-5, 4, 2], 0xffffff, 1.4, 100, 15);
+    Engine.addPointLight("pl3", [5, 4, -2], 0xffffff, 1.4, 100, 15);
+    Engine.addPointLight("pl4", [-5, 4, -2], 0xffffff, 1.4, 100, 15);
+    Engine.addPointLight("pl4", [0, 4, -5], 0xffffff, 1.4, 100, 15);
     Engine.addSkybox("negx.png", "posx.png", "posy.png", "negy.png", "posz.png", "negz.png","\\res\\skybox\\toonSky\\");
     Engine.addCube("cube");
     Engine.addModel(PikachuOBJ.id, PikachuOBJ.folderPath, PikachuOBJ.objPath, PikachuOBJ.mtlPath);
